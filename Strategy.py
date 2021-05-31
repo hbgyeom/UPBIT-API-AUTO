@@ -1,8 +1,9 @@
+from re import T
 import pyupbit
 
 # 원화 거래 가능 코인 리스트
 ticker_list = pyupbit.get_tickers(fiat="KRW")
-
+    
 # 목표가 계산 함수
 def calc_target(ticker):
     df = pyupbit.get_ohlcv(ticker, "day", 2)
@@ -17,3 +18,9 @@ def calc_coefficient(ticker):
     current_price = pyupbit.get_current_price(ticker)
     coefficient = current_price - calc_target(ticker)
     return coefficient
+
+# 조건 충족 코인 리스트
+purchasable_list = []
+for j in range (0, len(ticker_list)):
+    if calc_coefficient(ticker_list[j]) >= 0:
+        purchasable_list.append(ticker_list[j])
