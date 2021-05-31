@@ -46,9 +46,12 @@ class MyWindow(QMainWindow):
                 self.access.clear()
                 self.error_message.setText("wrong key")
             else:
-                self.error_message.clear()
                 upbit = pyupbit.Upbit(access_key, secret_key)
-                print(upbit.get_balance("KRW"))
+                if upbit.get_balances() == {'error': {'message': 'Jwt 토큰 검증에 실패했습니다.', 'name': 'jwt_verification'}}:
+                    self.error_message.setText("wrong key")
+            self.button.setText("stop")
+        else:
+            self.button.setText("run")
 
 app = QApplication(sys.argv)
 window = MyWindow()
